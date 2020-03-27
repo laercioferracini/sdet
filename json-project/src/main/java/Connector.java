@@ -20,14 +20,24 @@ public class Connector {
 
         try {
             Connection connection = getConnection();
-            String query = "select * from CustomerInfo where purchasedDate=CURDATE() and Location ='Asia'";
+            String query = "select * from CustomerInfo where purchasedDate=\"2020-03-25\" and Location ='Asia' and Amount = 21";
             Statement pst = connection.createStatement();
             ResultSet resultSet = pst.executeQuery(query);
+            CustomerDetails customerDetails = null;
+
             while (resultSet.next()) {
-                System.out.printf("Result: %s %s %s %s %n",
-                        resultSet.getString("CourseName"), resultSet.getString("PurchasedDate"), resultSet.getString("Amount"), resultSet.getString("Location"));
+                customerDetails = new CustomerDetails(
+                        resultSet.getString("CourseName"),
+                        resultSet.getString("PurchasedDate"),
+                        resultSet.getString("Amount"),
+                        resultSet.getString("Location"));
+
+
 
             }
+
+            assert customerDetails != null;
+            System.out.println(customerDetails.toString());
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
