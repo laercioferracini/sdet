@@ -1,4 +1,4 @@
-package main.java;
+package pojo;
 
 public class CustomerDetails {
     private String courseName;
