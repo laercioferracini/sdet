@@ -2,9 +2,10 @@ package consumers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import connectors.Connector;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import pojo.CustomerDetails;
+import pojo.CustomerDetailsList;
+import utils.Globals;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,10 +14,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * @author lferracini
@@ -58,13 +59,12 @@ public class CustomerConsumer {
             }
         });
     };
-    public Consumer<JSONObject> saveJson = jsonObject ->{
+    public Consumer<JSONObject> saveJson = jsonObject -> {
         try {
-            new ObjectMapper().writeValue(new File("jsonFiles/customerDetailsList.json"), jsonObject);
+            new ObjectMapper().writeValue(new File(Globals.JSON_LIST), jsonObject);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     };
 
     private static void saveJsonFiles(List<CustomerDetails> customerDetailsList) {
@@ -76,7 +76,18 @@ public class CustomerConsumer {
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-
         });
     }
+
+    public Function<File, CustomerDetailsList> readJsonToObject = (file) -> {
+        ObjectMapper mapper = new ObjectMapper();
+        CustomerDetailsList customerDetailsList;
+        try {
+            customerDetailsList = mapper.readValue(file, CustomerDetailsList.class);
+        } catch (IOException e) {
+            customerDetailsList = new CustomerDetailsList();
+            e.printStackTrace();
+        }
+        return customerDetailsList;
+    };
 }
