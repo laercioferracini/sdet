@@ -1,10 +1,14 @@
+#!groovy
+
 pipeline {
     agent any
     stages {
-        stage('Build') {
+        stage('Checking project'){
             step {
                 bat "cd docker-validation"
             }
+        }
+        stage('Build') {
             step {
                 bat "mvn compile"
             }
