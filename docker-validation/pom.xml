@@ -21,7 +21,6 @@
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <testng.selenium.endpoint>https://google.com</testng.selenium.endpoint>
     </properties>
 
     <dependencies>
@@ -38,13 +37,6 @@
             <version>6.8.21</version>
             <scope>provided</scope>
         </dependency>
-
-        <dependency>
-            <groupId>com.github.jsdevel</groupId>
-            <artifactId>testng-selenium</artifactId>
-            <version>0.10.0</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <build>
@@ -57,9 +49,6 @@
                     <suiteXmlFiles>
                         <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
-                    <systemProperties>
-                        <testng.selenium.endpoint>${testng.selenium.endpoint}</testng.selenium.endpoint>
-                    </systemProperties>
                 </configuration>
             </plugin>
         </plugins>
