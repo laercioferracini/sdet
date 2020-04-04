@@ -1,0 +1,24 @@
+pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            step {
+                bat "cd docker-validation"
+            }
+            step {
+                bat "mvn compile"
+            }
+
+        }
+        stage('Deploy') {
+            step {
+                echo "Deploy code in dev"
+            }
+        }
+        stage('Test') {
+            step {
+                bat "mvn test"
+            }
+        }
+    }
+}
