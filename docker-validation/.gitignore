@@ -1,0 +1,5 @@
+/.idea/
+/target/
+/docker-validation.iml
+screenshots/*
+
