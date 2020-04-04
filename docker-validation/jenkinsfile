@@ -3,9 +3,11 @@
 pipeline {
     agent any
     stages {
-        stage('Checking project'){
+        stage('Checking project') {
             steps {
-                bat "cd docker-validation"
+                dir("docker-validation") {
+                    bat "dir"
+                }
             }
         }
         stage('Build') {

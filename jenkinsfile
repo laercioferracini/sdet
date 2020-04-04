@@ -2,15 +2,18 @@
 
 pipeline {
     agent any
+	enviroment{
+		PATH = 'docker-validation/'
+	}
     stages {
         stage('Checking project'){
             steps {
-                bat "cd docker-validation"
+                bat "cd ${PATH}"
             }
         }
         stage('Build') {
             steps {
-                bat "mvn compile"
+                bat "mvn -f ${PATH} compile"
             }
 
         }
@@ -21,7 +24,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                bat "mvn test"
+                bat "mvn -f ${PATH} test"
             }
         }
     }
