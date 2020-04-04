@@ -2,4 +2,5 @@
 /target/
 /docker-validation.iml
 screenshots/*
+*.log
 
