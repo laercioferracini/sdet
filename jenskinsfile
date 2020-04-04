@@ -2,25 +2,25 @@
 
 pipeline {
     agent any
-    stages {
+    stages{
         stage('Checking project'){
-            step {
+            steps {
                 bat "cd docker-validation"
             }
         }
         stage('Build') {
-            step {
+            steps {
                 bat "mvn compile"
             }
 
         }
         stage('Deploy') {
-            step {
+            steps {
                 echo "Deploy code in dev"
             }
         }
         stage('Test') {
-            step {
+            steps {
                 bat "mvn test"
             }
         }
