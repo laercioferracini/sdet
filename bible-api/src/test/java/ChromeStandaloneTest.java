@@ -1,3 +1,4 @@
+import org.junit.Test;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -20,12 +21,8 @@ import java.util.logging.Logger;
 public class ChromeStandaloneTest {
     private final static Logger LOGGER = Logger.getLogger(ChromeStandaloneTest.class.getName());
 
-    public static void main(String[] args) {
-        runChrome();
-//        runFirefox();
-    }
-
-    private static void runFirefox() {
+    @Test
+    public  void runFirefox() {
         try {
 
             URL url = new URL("http://localhost:4445/wd/hub");
@@ -40,8 +37,8 @@ public class ChromeStandaloneTest {
             e.printStackTrace();
         }
     }
-
-    private static void runChrome() {
+    @Test
+    public void runChrome() {
         try {
 
             URL url = new URL("http://localhost:4444/wd/hub");
