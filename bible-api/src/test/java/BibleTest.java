@@ -34,7 +34,7 @@ public class BibleTest {
     }
 
     @Test
-    public void verificaTitulo() throws IOException {
+    public void getChaptersFromBook() throws IOException {
 
         WebDriver driver = getDriver();
         driver.get("https://bible.com/pt/bible/1275/GEN.1");
@@ -46,7 +46,7 @@ public class BibleTest {
         while (!driver.getTitle().contains("(Rev) 22")) {
             WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("nav-right")));
             String chapter = ((RemoteWebDriver) driver).findElementByClassName("chapter").getText();
-            System.out.println(chapter);
+            //System.out.println(chapter);
             writeBookFile(driver.getTitle(), chapter);
             element.click();
             FilesUtils.writeFile(Paths.get("files/", "contador.txt"), String.valueOf(cont++));
