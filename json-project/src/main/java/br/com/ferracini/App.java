@@ -1,14 +1,13 @@
+package br.com.ferracini;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import consumers.CustomerConsumer;
+import br.com.ferracini.consumers.CustomerConsumer;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import pojo.CustomerDetails;
-import pojo.CustomerDetailsList;
-import utils.Globals;
+import br.com.ferracini.pojo.CustomerDetails;
+import br.com.ferracini.pojo.CustomerDetailsList;
+import br.com.ferracini.utils.Globals;
 
 import java.io.File;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 

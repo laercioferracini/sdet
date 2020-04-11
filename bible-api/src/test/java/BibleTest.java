@@ -43,14 +43,14 @@ public class BibleTest {
         FilesUtils.screenshot((RemoteWebDriver) driver, "screenshot");
         Assert.assertThat(driver.getTitle(), CoreMatchers.containsString("CJB"));
         int cont = 1;
-        while (!driver.getTitle().contains("(Rev) 22")) {
+        //while (!driver.getTitle().contains("(Rev) 22")) {
             WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("nav-right")));
             String chapter = ((RemoteWebDriver) driver).findElementByClassName("chapter").getText();
             //System.out.println(chapter);
             writeBookFile(driver.getTitle(), chapter);
             element.click();
             FilesUtils.writeFile(Paths.get("files/", "contador.txt"), String.valueOf(cont++));
-        }
+        //}
 
         System.out.println(driver.getTitle());
         driver.quit();// kill the driver and the browser
@@ -70,27 +70,6 @@ public class BibleTest {
 
         FilesUtils.writeFile(pathFile, chapter);
 
-    }
-
-
-    @Test
-    public void runChromeYahoo() {
-        try {
-
-            URL url = new URL("http://localhost:4444/wd/hub");
-            DesiredCapabilities caps = DesiredCapabilities.chrome();
-            RemoteWebDriver driver = new RemoteWebDriver(url, caps);
-            driver.get("https://bible.com/pt/bible/1275/DAN.1.CJB");
-            System.out.println(driver.getTitle());
-
-            FilesUtils.screenshot(driver, "screenshot");
-            driver.findElement(By.cssSelector(".next-arrow > a:nth-child(1) > div:nth-child(1) > svg:nth-child(1)")).click();
-            Thread.sleep(2000);
-            System.out.println(driver.getTitle());
-            driver.quit();
-        } catch (MalformedURLException | InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
 }

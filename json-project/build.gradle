@@ -1,0 +1,43 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+group 'br.com.ferracini'
+version '0.0.1-SNAPSHOT'
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/java'
+        }
+    }
+    test {
+        java {
+            srcDir('src/test/java')
+        }
+    }
+
+}
+
+dependencies {
+    implementation group: 'org.testng', name: 'testng', version: '7.1.0'
+    implementation group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.10.3'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.3'
+    implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+    implementation group: 'org.apache.poi', name: 'poi', version: '4.1.2'
+    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.1.2'
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.19'
+}
+
+task wrapper(type: Wrapper)
+
+application {
+    mainClassName = "br.com.ferracini.App"
+}

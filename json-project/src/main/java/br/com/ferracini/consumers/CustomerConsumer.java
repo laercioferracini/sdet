@@ -1,11 +1,11 @@
-package consumers;
+package br.com.ferracini.consumers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import connectors.Connector;
+import br.com.ferracini.connectors.Connector;
 import org.json.simple.JSONObject;
-import pojo.CustomerDetails;
-import pojo.CustomerDetailsList;
-import utils.Globals;
+import br.com.ferracini.pojo.CustomerDetails;
+import br.com.ferracini.pojo.CustomerDetailsList;
+import br.com.ferracini.utils.Globals;
 
 import java.io.File;
 import java.io.IOException;

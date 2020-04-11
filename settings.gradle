@@ -1,0 +1,1 @@
+include 'bible-api', 'docker-validation', 'json-project'

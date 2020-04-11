@@ -1,4 +1,4 @@
-package pojo;
+package br.com.ferracini.pojo;
 
 import java.util.List;
 

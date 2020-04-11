@@ -1,4 +1,4 @@
-package utils;
+package br.com.ferracini.utils;
 
 /**
  * @author lferracini
