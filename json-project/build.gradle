@@ -14,7 +14,7 @@ repositories {
 sourceSets {
     main {
         java {
-            srcDir 'src/java'
+            srcDir 'src/main/java'
         }
     }
     test {
