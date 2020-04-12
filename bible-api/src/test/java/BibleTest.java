@@ -57,7 +57,6 @@ public class BibleTest {
         driver.quit();// kill the driver and the browser
     }
 
-    @Test
     public void runFirefox() {
         try {
 
@@ -68,23 +67,6 @@ public class BibleTest {
             System.out.println(driver.getTitle());
 
             //screenshot(driver, "screenshot");
-            driver.quit();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    public void runChrome() {
-        try {
-
-            URL url = new URL("http://localhost:4444/wd/hub");
-            DesiredCapabilities caps = DesiredCapabilities.chrome();
-            RemoteWebDriver driver = new RemoteWebDriver(url, caps);
-            driver.get("http://github.com");
-            System.out.println(driver.getTitle());
-
-            FilesUtils.screenshot(driver, "screenshot");
             driver.quit();
         } catch (MalformedURLException e) {
             e.printStackTrace();
