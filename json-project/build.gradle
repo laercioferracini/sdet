@@ -41,3 +41,7 @@ task wrapper(type: Wrapper)
 application {
     mainClassName = "br.com.ferracini.App"
 }
+
+test{
+    useTestNG()
+}
