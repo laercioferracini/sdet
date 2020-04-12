@@ -1,6 +1,6 @@
 import org.hamcrest.CoreMatchers;
-import org.junit.Assert;
-import org.junit.Test;
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -15,7 +15,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Logger;
 
 /**
  * @author lferracini
@@ -23,6 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @since <pre>05/04/2020</pre>
  */
 public class BibleTest {
+    private final static Logger LOGGER = Logger.getLogger(BibleTest.class.getName());
 
     public WebDriver getDriver() {
         System.setProperty("webdriver.gecko.driver", "driver\\geckodriver.exe");
@@ -41,19 +42,53 @@ public class BibleTest {
         WebDriverWait wait = new WebDriverWait(driver, 10);
         System.out.println(driver.getTitle());
         FilesUtils.screenshot((RemoteWebDriver) driver, "screenshot");
-        Assert.assertThat(driver.getTitle(), CoreMatchers.containsString("CJB"));
+        MatcherAssert.assertThat(driver.getTitle(), CoreMatchers.containsString("CJB"));
         int cont = 1;
         //while (!driver.getTitle().contains("(Rev) 22")) {
-            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("nav-right")));
-            String chapter = ((RemoteWebDriver) driver).findElementByClassName("chapter").getText();
-            //System.out.println(chapter);
-            writeBookFile(driver.getTitle(), chapter);
-            element.click();
-            FilesUtils.writeFile(Paths.get("files/", "contador.txt"), String.valueOf(cont++));
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("nav-right")));
+        String chapter = ((RemoteWebDriver) driver).findElementByClassName("chapter").getText();
+        //System.out.println(chapter);
+        writeBookFile(driver.getTitle(), chapter);
+        element.click();
+        FilesUtils.writeFile(Paths.get("files/", "contador.txt"), String.valueOf(cont++));
         //}
 
         System.out.println(driver.getTitle());
         driver.quit();// kill the driver and the browser
+    }
+
+    @Test
+    public void runFirefox() {
+        try {
+
+            URL url = new URL("http://localhost:4445/wd/hub");
+            DesiredCapabilities caps = DesiredCapabilities.firefox();
+            RemoteWebDriver driver = new RemoteWebDriver(url, caps);
+            driver.get("http://github.com");
+            System.out.println(driver.getTitle());
+
+            //screenshot(driver, "screenshot");
+            driver.quit();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void runChrome() {
+        try {
+
+            URL url = new URL("http://localhost:4444/wd/hub");
+            DesiredCapabilities caps = DesiredCapabilities.chrome();
+            RemoteWebDriver driver = new RemoteWebDriver(url, caps);
+            driver.get("http://github.com");
+            System.out.println(driver.getTitle());
+
+            FilesUtils.screenshot(driver, "screenshot");
+            driver.quit();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void writeBookFile(String title, String chapter) throws IOException {

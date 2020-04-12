@@ -14,13 +14,15 @@ repositories {
 
 dependencies {
     implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.141.59'
-    implementation group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.6.1'
+    testRuntime group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.6.1'
     implementation group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
     implementation group: 'org.seleniumhq.selenium', name: 'selenium-firefox-driver', version: '3.141.59'
-    implementation 'junit:junit:4.12'
+
 }
 
 test {
-    testLogging.showStandardStreams = true
-    systemProperty('junit.jupiter.extensions.autodetection.enabled', true)
+    useJUnitPlatform()
+    //testLogging.showStandardStreams = true
+    //systemProperty('junit.jupiter.extensions.autodetection.enabled', true)
 }
