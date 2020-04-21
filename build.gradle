@@ -4,7 +4,9 @@ allprojects {
     compileTestJava.options.encoding = "UTF-8"
 }
 
-version '0.0.1.SNAPSHOT'
+subprojects {
+    version = '0.0.1-SNAPSHOT'
+}
 
 project(':json-project'){}
 
