@@ -9,6 +9,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import utils.FilesUtils;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -16,6 +17,8 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.Logger;
+
+import static utils.DriverUtils.setDriverProperty;
 
 /**
  * @author lferracini
@@ -26,7 +29,7 @@ public class BibleTest {
     private final static Logger LOGGER = Logger.getLogger(BibleTest.class.getName());
 
     public WebDriver getDriver() {
-        System.setProperty("webdriver.gecko.driver", "driver\\geckodriver.exe");
+        setDriverProperty();
         WebDriver driver = new FirefoxDriver();
         driver.get("https://bible.com/pt/bible/1275/DAN.1.CJB");
 
@@ -44,14 +47,14 @@ public class BibleTest {
         FilesUtils.screenshot((RemoteWebDriver) driver, "screenshot");
         MatcherAssert.assertThat(driver.getTitle(), CoreMatchers.containsString("CJB"));
         int cont = 1;
-        //while (!driver.getTitle().contains("(Rev) 22")) {
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("nav-right")));
-        String chapter = ((RemoteWebDriver) driver).findElementByClassName("chapter").getText();
-        //System.out.println(chapter);
-        writeBookFile(driver.getTitle(), chapter);
-        element.click();
-        FilesUtils.writeFile(Paths.get("files/", "contador.txt"), String.valueOf(cont++));
-        //}
+        while (!driver.getTitle().contains("(Rev) 22")) {
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("nav-right")));
+            String chapter = ((RemoteWebDriver) driver).findElementByClassName("chapter").getText();
+            //System.out.println(chapter);
+            writeBookFile(driver.getTitle(), chapter);
+            element.click();
+            FilesUtils.writeFile(Paths.get("files/", "contador.txt"), String.valueOf(cont++));
+        }
 
         System.out.println(driver.getTitle());
         driver.quit();// kill the driver and the browser

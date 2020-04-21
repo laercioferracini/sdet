@@ -20,9 +20,19 @@ dependencies {
     implementation group: 'org.seleniumhq.selenium', name: 'selenium-firefox-driver', version: '3.141.59'
 
 }
+task setExecutable(type: Exec) {
+    if (System.getProperty("os.name").toUpperCase().contains("LINUX")) {
+        workingDir 'driver/'
+
+        executable("chmod")
+        args("+x", "geckodriver")
+    }
+}
 
 test {
+    dependsOn('setExecutable')
     useJUnitPlatform()
     //testLogging.showStandardStreams = true
     //systemProperty('junit.jupiter.extensions.autodetection.enabled', true)
 }
+
