@@ -10,6 +10,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -21,12 +23,24 @@ public class FilesUtils {
 
     private final static Logger LOGGER = Logger.getLogger(FilesUtils.class.getName());
 
-    public static void createFile(Path pathFile) throws IOException {
-        if (!Files.exists(pathFile)) Files.createFile(pathFile);
+    public static void createFile(Path pathFile) {
+        if (!Files.exists(pathFile)) {
+            try {
+                Files.createFile(pathFile);
+            } catch (IOException e) {
+                throw new RuntimeException("Erro ao criar arquivo: " + pathFile.toString());
+            }
+        }
     }
 
-    public static void createDir(Path dir) throws IOException {
-        if (!Files.exists(dir)) Files.createDirectories(dir);
+    public static void createDir(Path dir) {
+        if (!Files.exists(dir)) {
+            try {
+                Files.createDirectories(dir);
+            } catch (IOException e) {
+                throw new RuntimeException("Erro ao criar diretório: " + dir.toString());
+            }
+        }
     }
 
     public static void writeFile(Path pathFile, String text) {
@@ -37,8 +51,12 @@ public class FilesUtils {
         }
     }
 
-    public static void main(String[] args) {
-        copyFiles("F:\\Dropbox\\Books\\Bible\\CJB\\");
+    static List<String> readFile(String file) {
+        try {
+            return Files.readAllLines(Path.of(file));
+        } catch (IOException e) {
+            return new ArrayList<>();
+        }
     }
 
     public static void copyFiles(String destDir) {

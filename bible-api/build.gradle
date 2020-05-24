@@ -20,7 +20,9 @@ dependencies {
     implementation group: 'org.seleniumhq.selenium', name: 'selenium-firefox-driver', version: '3.141.59'
 
 }
+
 task setExecutable(type: Exec) {
+//
     if (System.getProperty("os.name").toUpperCase().contains("LINUX")) {
         workingDir 'driver/'
 
@@ -30,7 +32,13 @@ task setExecutable(type: Exec) {
 }
 
 test {
-    dependsOn('setExecutable')
+    String apiKey = ""
+    if (System.hasProperty("api_key"))
+        apiKey = System.getProperty("api_key")
+
+    println "apiKey: "+apiKey
+    environment(Map.of("api.key", apiKey, "api", "api"));
+    //dependsOn('setExecutable')
     useJUnitPlatform()
     //testLogging.showStandardStreams = true
     //systemProperty('junit.jupiter.extensions.autodetection.enabled', true)
