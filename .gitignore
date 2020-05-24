@@ -4,3 +4,4 @@
 /docker-validation/build/
 /json-project/build/
 stale_outputs_checked
+/bible-api/src/test/resources/links.csv
