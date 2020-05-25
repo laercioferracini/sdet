@@ -1,5 +1,6 @@
 package br.com.ferracini.suites;
 
+import api.RequestBookAPI;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -32,6 +33,7 @@ public class ChromeStandaloneTest {
 
     @BeforeSuite
     public void setUp() throws IOException, InterruptedException {
+        System.out.println(RequestBookAPI.getBaseUrl("dsd"));
         start();
     }
 
