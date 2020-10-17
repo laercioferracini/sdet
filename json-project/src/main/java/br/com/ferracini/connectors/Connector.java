@@ -20,6 +20,5 @@ public class Connector {
         } catch (ClassNotFoundException | SQLException e) {
             throw new Exception("An error has got it, something screw it up on: " + e.getMessage());
         }
-
     }
 }

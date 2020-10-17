@@ -33,6 +33,12 @@ task setExecutable(type: Exec) {
 }
 
 test {
+
+//    systemProperties['https.proxyHost'] = 'localhost'
+//    systemProperties['https.proxyPort'] = '8080'
+//    systemProperties['http.proxyHost'] = 'localhost'
+//    systemProperties['http.proxyPort'] = '8080'
+
     String apiKey = ""
     if (System.hasProperty("api_key"))
         apiKey = System.getProperty("api_key")
