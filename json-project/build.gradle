@@ -34,6 +34,7 @@ dependencies {
     implementation group: 'org.apache.poi', name: 'poi', version: '4.1.2'
     implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '4.1.2'
     implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.19'
+    implementation group: 'io.vavr', name: 'vavr', version: '0.10.0'
 }
 
 task wrapper(type: Wrapper)

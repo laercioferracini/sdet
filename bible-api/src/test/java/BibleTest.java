@@ -1,6 +1,6 @@
 import org.hamcrest.CoreMatchers;
-import org.hamcrest.MatcherAssert;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
 import org.openqa.selenium.By;
@@ -22,8 +22,11 @@ import java.nio.file.Paths;
 import java.util.logging.Logger;
 
 import static api.RequestBookAPI.getBaseUrl;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static utils.DriverUtils.setDriverProperty;
+import static utils.FilesUtils.screenshot;
+import static utils.FilesUtils.writeFile;
 
 /**
  * @author lferracini
@@ -34,8 +37,46 @@ public class BibleTest {
     private final static Logger LOGGER = Logger.getLogger(BibleTest.class.getName());
     static WebDriver driver;
 
-    //@BeforeEach
+    @AfterAll
     //@DisabledIfSystemProperty(named = "api",matches = "api")
+    static void destroy() {
+        LOGGER.info("After all");
+        driver.quit();// kill the driver and the browser
+    }
+
+    private static void writeBookFile(String title, String chapter) {
+
+        String tChapter = title.split(",")[0];
+        String book = tChapter.substring(tChapter.indexOf("(") + 1, tChapter.lastIndexOf(")"));
+        Path dir = Paths.get("files/" + book + "/");
+
+        FilesUtils.createDir(dir);
+        if (tChapter.contains("|"))
+            tChapter = tChapter.split("\\|")[0];
+        Path pathFile = Paths.get("files/" + book + "/", tChapter + ".txt");
+
+        FilesUtils.createFile(pathFile);
+
+        writeFile(pathFile, chapter);
+
+    }
+
+    private static void writeDownloadLinks(String link) {
+
+        Path dir = Paths.get("files/");
+
+        FilesUtils.createDir(dir);
+
+        Path pathFile = Paths.get("files/links.txt");
+
+        FilesUtils.createFile(pathFile);
+
+        writeFile(pathFile, link);
+
+    }
+
+    @BeforeEach
+        //@DisabledIfSystemProperty(named = "api",matches = "api")
     void initDriver() {
         driver = getDriver();
     }
@@ -44,40 +85,41 @@ public class BibleTest {
         setDriverProperty();
 
         if (driver == null) driver = new FirefoxDriver();
-        //driver.get("https://bible.com/pt/bible/1275/DAN.1.CJB");
-
         //driver.manage().window().maximize();
         return driver;
     }
 
-    //@Test
+    @Test
     //@DisabledIfSystemProperty(named = "api",matches = "api")
-    public void getChaptersFromBook() throws IOException {
+    public void getChaptersFromBook() {
 
-        driver.get("https://bible.com/pt/bible/1275/GEN.1");
+        driver.get("https://bible.com/pt/bible/1275/REV.22");
         WebDriverWait wait = new WebDriverWait(driver, 10);
-        System.out.println(driver.getTitle());
-        FilesUtils.screenshot((RemoteWebDriver) driver, "screenshot");
-        MatcherAssert.assertThat(driver.getTitle(), CoreMatchers.containsString("CJB"));
+        screenshot((RemoteWebDriver) driver, "screenshot");
+        assertThat(driver.getTitle(), CoreMatchers.containsString("CJB"));
         int cont = 1;
-        while (!driver.getTitle().contains("(Rev) 22")) {
-            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("nav-right")));
-            String chapter = ((RemoteWebDriver) driver).findElementByClassName("chapter").getText();
-            //System.out.println(chapter);
-            writeBookFile(driver.getTitle(), chapter);
-            element.click();
-            FilesUtils.writeFile(Paths.get("files/", "contador.txt"), String.valueOf(cont++));
+        boolean lastChapter = true;
+        while (lastChapter) {
+            if (!driver.getTitle().contains("(Rev) 22")) {
+                WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("nav-right")));
+                String chapter = ((RemoteWebDriver) driver).findElementByClassName("chapter").getText();
+                LOGGER.info(driver.getTitle());
+                writeBookFile(driver.getTitle(), chapter);
+                element.click();
+                writeFile(Paths.get("files/", "contador.txt"), cont++ + ". " + driver.getTitle());
+            } else {
+                String chapter = ((RemoteWebDriver) driver).findElementByClassName("chapter").getText();
+                writeBookFile(driver.getTitle(), chapter);
+                writeFile(Paths.get("files/", "contador.txt"), cont++ + ". " + driver.getTitle());
+                lastChapter = false;
+            }
         }
-
-        System.out.println(driver.getTitle());
-        //driver.quit();// kill the driver and the browser
     }
-
 
     //@ParameterizedTest
     //@CsvFileSource(resources = "links.csv", numLinesToSkip = 1, delimiter = ';')
     //@DisabledIfSystemProperty(named = "api",matches = "api")
-    public void getLinksDownloadBooks(ArgumentsAccessor accessor) throws IOException {
+    public void getLinksDownloadBooks(ArgumentsAccessor accessor) {
         Link link = new Link(
                 accessor.get(0).toString(),
                 accessor.get(1).toString(),
@@ -93,7 +135,7 @@ public class BibleTest {
         WebDriverWait wait = new WebDriverWait(driver, 10);
         String title = driver.getTitle();
         System.out.println(title);
-        FilesUtils.screenshot((RemoteWebDriver) driver, "screenshot");
+        screenshot((RemoteWebDriver) driver, "screenshot");
 
         WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("test-bookpdf-link")));
 
@@ -121,13 +163,6 @@ public class BibleTest {
                 .contains("https://www.googleapis.com/books/v1/volumes?q=isbn%3D9781137525024&key="));
     }
 
-    //@AfterAll
-    //@DisabledIfSystemProperty(named = "api",matches = "api")
-    static void destroy() {
-        System.out.println("After all");
-        driver.quit();// kill the driver and the browser
-    }
-
     public void runFirefox() {
         try {
 
@@ -142,36 +177,6 @@ public class BibleTest {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-    }
-
-    private static void writeBookFile(String title, String chapter) throws IOException {
-
-        String tChapter = title.split(",")[0];
-        String book = tChapter.substring(tChapter.indexOf("(") + 1, tChapter.lastIndexOf(")"));
-        Path dir = Paths.get("files/" + book + "/");
-
-        FilesUtils.createDir(dir);
-
-        Path pathFile = Paths.get("files/" + book + "/", tChapter + ".txt");
-
-        FilesUtils.createFile(pathFile);
-
-        FilesUtils.writeFile(pathFile, chapter);
-
-    }
-
-    private static void writeDownloadLinks(String link) throws IOException {
-
-        Path dir = Paths.get("files/");
-
-        FilesUtils.createDir(dir);
-
-        Path pathFile = Paths.get("files/links.txt");
-
-        FilesUtils.createFile(pathFile);
-
-        FilesUtils.writeFile(pathFile, link);
-
     }
 
 

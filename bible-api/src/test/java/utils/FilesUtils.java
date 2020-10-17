@@ -45,13 +45,17 @@ public class FilesUtils {
 
     public static void writeFile(Path pathFile, String text) {
         try {
+            if (!Files.exists(pathFile)) {
+                Files.createFile(pathFile);
+            }
             Files.writeString(pathFile, text.concat("\n"), StandardOpenOption.APPEND);
+
         } catch (IOException e) {
             LOGGER.severe("An error occurred at write in file." + e);
         }
     }
 
-    static List<String> readFile(String file) {
+    public static List<String> readFile(String file) {
         try {
             return Files.readAllLines(Path.of(file));
         } catch (IOException e) {
@@ -80,5 +84,28 @@ public class FilesUtils {
             LOGGER.severe("An error occurred at take an screenshot." + e);
         }
 
+    }
+
+    public static boolean verifyBooks() {
+
+        boolean resultado = false;
+        String fileName = "bible-api/files/contador.txt";
+        Path path = Paths.get(fileName);
+        System.out.println(path.toAbsolutePath().getParent().toString());
+        List<String> books = FilesUtils.readFile(fileName);
+        int cont = 1;
+        for (String book : books) {
+            System.out.printf("%s%s%n",cont,book.split("\\.")[1]);
+            cont++;
+        }
+
+        //books.forEach(System.out::println);
+
+        return books.isEmpty();
+    }
+
+    public static void main(String[] args) {
+        boolean b = FilesUtils.verifyBooks();
+        System.out.println(b);
     }
 }
